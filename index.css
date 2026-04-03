@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f0e3;
+  /* Soft parchment color */
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", "Arial", sans-serif;
+  /* Malayalam-friendly fonts first */
+  color: #3d2a1f;
+  /* Dark brown text */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  /* Align content to the top */
+}
+
+.page-container {
+  /* Keep existing styles like max-width, padding, box-sizing */
+  width: 100%;
+  max-width: 1200px;
+  padding: 50px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  /* This centers the page-container itself */
+}
+
+.top-section {
+  display: flex;
+  /* Use flexbox */
+  justify-content: center;
+  /* Center horizontally within top-section */
+  align-items: center;
+  /* (Optional) Vertically center if top-section has a height */
+  margin-bottom: 50px;
+  /* Remove padding-bottom: 20px; if you don't want extra space within top-section */
+}
+
+.malayalam-title {
+  /* Keep existing font, size, weight, color, text-shadow, line-height */
+  /* Remove text-align: right; as we want it centered */
+  text-align: center;
+  /* Explicitly center the text within the h1 element */
+  margin-left: 0;
+  /* No need for left margin when centering */
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .top-section {
+    flex-direction: row;
+    /* Keep it a row even on small screens if only title */
+    /* If scroll is reintroduced, this might need to be 'column' again */
+  }
+
+  .malayalam-title {
+    font-size: 2.5em;
+    /* Adjust as desired for smaller screens */
+    text-align: center;
+  }
+}
+
+.topics-list {
+  list-style: none;
+  /* Remove default bullet points */
+  padding: 0;
+  margin-left: 50px;
+  /* Indent the list from the left edge */
+}
+
+.topics-list li {
+  display: flex;
+  /* Use flex to align icon and text */
+  align-items: center;
+  margin-bottom: 20px;
+  /* Space between topics */
+}
+
+.hand-icon {
+  width: 40px;
+  /* Size of the hand icon */
+  height: auto;
+  margin-right: 20px;
+  /* Space between icon and text */
+  /* The image provided has the hand pointing right, so no need to flip. */
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+.hand-icon svg {
+  fill: #000000;
+  /* Make the hand icon black */
+}
+
+.topic-link {
+  font-size: 1.8em;
+  /* Large font size for topics */
+  font-weight: bold;
+  color: #3d2a1f;
+  /* Link color matching general text */
+  text-decoration: underline;
+  /* Underline the "Questions topics" */
+  text-decoration-thickness: 2px;
+  /* Thicker underline */
+  text-decoration-color: #3d2a1f;
+  /* Underline color */
+  text-underline-offset: 5px;
+  /* Space between text and underline */
+  cursor: pointer;
+  /* Indicate it's clickable */
+  transition:
+    color 0.3s ease,
+    text-decoration-color 0.3s ease;
+  /* Smooth hover effect */
+}
+
+.topic-link:hover {
+  color: #7a5d4d;
+  /* Darker brown on hover */
+  text-decoration-color: #7a5d4d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 30px 20px;
+  }
+
+  .scroll-image {
+    width: 150px;
+    margin-bottom: 20px;
+    /* Add space below scroll when wrapped */
+  }
+
+  .malayalam-title {
+    font-size: 2.5em;
+    text-align: center;
+    /* Center title when wrapped */
+    width: 100%;
+    /* Take full width when wrapped */
+  }
+
+  .top-section {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .topics-list {
+    margin-left: 10px;
+    /* Reduce indent on small screens */
+  }
+
+  .topics-list li {
+    font-size: 1.2em;
+    justify-content: space-between;
+  }
+
+  .hand-icon {
+    width: 30px;
+    margin-right: 10px;
+  }
+}
+.topics-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+.question-btn {
+    color: #7a5d4d;
+    background: none;
+    border: 2px solid #7a5d4d;
+    border-radius: 50%;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.question-btn:hover {
+    background-color: #7a5d4d;
+    color: white;
+}
+
+.question-btn svg {
+    fill: #7a5d4d;
+}
+
+.question-btn:hover svg {
+    fill: white;
+}

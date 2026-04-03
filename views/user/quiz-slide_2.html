@@ -1,0 +1,379 @@
+<!-- ===================================================
+     QUIZ SLIDE — drop this <div class="slide"> block
+     anywhere inside your .slides-wrapper
+     =================================================== -->
+
+<div class="slide">
+  <div class="topic-header">
+    <h1>ചോദ്യോത്തര മത്സരം</h1>
+  </div>
+  <div class="preview">
+    <div class="quiz-container">
+
+      <!-- Question counter -->
+      <div class="quiz-meta">
+        <span class="q-badge">ചോദ്യം <span id="qNum">1</span> / <span id="qTotal">3</span></span>
+        <span class="q-score">സ്കോർ: <span id="qScore">0</span></span>
+      </div>
+
+      <!-- Question text -->
+      <div class="q-box">
+        <p id="questionText"></p>
+      </div>
+
+      <!-- 4 Options -->
+      <div class="options-grid" id="optionsGrid">
+        <button class="option-btn" data-index="0"></button>
+        <button class="option-btn" data-index="1"></button>
+        <button class="option-btn" data-index="2"></button>
+        <button class="option-btn" data-index="3"></button>
+      </div>
+
+      <!-- Feedback -->
+      <div class="q-feedback" id="qFeedback"></div>
+
+      <!-- Next button -->
+      <button class="q-next-btn" id="qNextBtn" style="display:none;">അടുത്ത ചോദ്യം →</button>
+
+      <!-- Result screen (hidden until end) -->
+      <div class="quiz-result" id="quizResult" style="display:none;">
+        <h2>🎉 ക്വിസ് പൂർത്തിയായി!</h2>
+        <p>നിങ്ങളുടെ സ്കോർ: <strong id="finalScore"></strong></p>
+        <button class="q-next-btn" id="qRestartBtn">വീണ്ടും ശ്രമിക്കുക</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================================================
+     ADD THIS CSS to your topic1.css
+     =================================================== -->
+<style>
+/* ── Quiz container ───────────────────────────── */
+.quiz-container {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Meta bar */
+.quiz-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  color: #7a5d4d;
+}
+
+.q-badge {
+  background: #7a5d4d;
+  color: #f8f0e3;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.9em;
+}
+
+.q-score {
+  font-weight: bold;
+  color: #5a3d2e;
+}
+
+/* Question box */
+.q-box {
+  background: #fff8f0;
+  border: 2px solid #d3c4a6;
+  border-radius: 10px;
+  padding: 18px 22px;
+}
+
+.q-box p {
+  font-size: clamp(1rem, 2.8vw, 1.25rem);
+  color: #3a2510;
+  line-height: 1.7;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Options grid */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 500px) {
+  .options-grid { grid-template-columns: 1fr; }
+}
+
+.option-btn {
+  background: #fff8f0;
+  border: 2px solid #d3c4a6;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: clamp(0.85rem, 2.2vw, 1.05rem);
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  color: #3a2510;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s, transform 0.1s;
+  line-height: 1.5;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: #f0e0cc;
+  border-color: #7a5d4d;
+  transform: translateY(-2px);
+}
+
+/* States set by JS */
+.option-btn.correct {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+  font-weight: bold;
+}
+
+.option-btn.wrong {
+  background: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+}
+
+.option-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* Feedback */
+.q-feedback {
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: bold;
+  min-height: 1.5em;
+  text-align: center;
+  color: #5a3d2e;
+}
+
+/* Next button */
+.q-next-btn {
+  align-self: flex-end;
+  background: #7a5d4d;
+  color: #f8f0e3;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 26px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.q-next-btn:hover {
+  background: #5a3d2e;
+  transform: translateY(-2px);
+}
+
+/* Result screen */
+.quiz-result {
+  background: #fff8f0;
+  border: 2px solid #d3c4a6;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.quiz-result h2 {
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  color: #5a3d2e;
+}
+
+.quiz-result p {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: #3a2510;
+}
+</style>
+
+
+<!-- ===================================================
+     ADD THIS JS to your app.js  (or a <script> tag)
+     =================================================== -->
+<script>
+// ─────────────────────────────────────────────────────
+//  QUIZ DATA
+//  • Add as many questions as you want
+//  • "correct" is the INDEX (0-3) of the right answer
+// ─────────────────────────────────────────────────────
+const quizData = [
+  {
+    question: "കുഞ്ചൻ നമ്പ്യാർ തുള്ളൽ കവിതകളിലൂടെ സാമൂഹ്യ വിമർശനം നടത്തിയിരുന്നു",
+    options: [
+      "ശരി",
+      "തെറ്റ്"
+    ],
+    correct: 0   // ← index of correct option (0 = first, 1 = second …)
+  },
+  {
+    question: "കുഞ്ചൻ നമ്പ്യാരുടെ തുള്ളൽ കവിതകൾ സമൂഹത്തിലെ അനീതി, അനാചാരങ്ങൾ തുടങ്ങിയവയെ പരിഹസിക്കുന്നു.",
+    options: [
+      "ശരി",
+      "തെറ്റ്"
+    ],
+    correct: 0
+  },
+  {
+    question: "താഴെ കൊടുത്തിരിക്കുന്നവയിൽ കുഞ്ചൻ നമ്പ്യാരുടെ കൃതി അല്ലാത്തത്?",
+    options: [
+      "കല്യാണസൗഗന്ധികം",
+      "ഹരിനാമകീർത്തനം",
+      "കിരാതനം",
+      "സ്യമന്തക"
+    ],
+    correct: 1
+  },
+  {
+    question: "കുഞ്ചൻ നമ്പ്യാരുടെ ആദ്യ കൃതിയിൽ (കല്യാണസൗഗന്ധികം) ഏത് തരം തുള്ളൽ രൂപമാണ് ഉപയോഗിച്ചിരുന്നത്?",
+    options: [
+      "ശീതങ്കൻതുള്ളൽ",
+      "പറയൻ തുള്ളൽ",
+      "ഓട്ടൻ തുള്ളൽ",
+      "ഇവയൊന്നുമല്ല"
+    ],
+    correct: 0
+  },
+  {
+    question: "തുള്ളൽ കലയുടെ ഉത്ഭവം കേരളത്തിലെ ക്ഷേത്രങ്ങളിലാണ്.",
+    options: [
+      "ശരി",
+      "തെറ്റ്"
+    ],
+    correct: 0
+  },
+  {
+    question: "തുള്ളൽ കവിതകൾ എല്ലാം സംസ്കൃതത്തിലാണ് എഴുതിയിരിക്കുന്നത്.",
+    options: [
+      "ശരി",
+      "തെറ്റ്"
+    ],
+    correct: 0
+  },
+  {
+    question: "തുള്ളൽ കലാരൂപം സമൂഹത്തിൽ എന്ത് സന്ദേശം നൽകുന്നു?",
+    options: [
+      "സമൂഹ്യ വിമർശനവും വിനോദവും",
+      "മതാചാരങ്ങൾ മാത്രം",
+      "വിനോദം മാത്രം",
+      "പൗരാണിക കഥകൾ മാത്രം"
+    ],
+    correct: 0
+  },
+  {
+    question: "കുഞ്ചൻ നമ്പ്യാരുടെ തുള്ളൽ സാഹിത്യം ഇന്നത്തെ സമൂഹത്തിൽ എങ്ങനെ പ്രസക്തമാണ്?” എന്ന വിഷയത്തിൽ  കുറിപ്പ് തയ്യാറാക്കുക.",
+    correct: 0
+  }
+];
+
+// ────────────────────────────────────────────────────
+//  QUIZ ENGINE
+// ─────────────────────────────────────────────────────
+(function initQuiz() {
+  let current = 0;
+  let score   = 0;
+  let answered = false;
+
+  const qNum      = document.getElementById('qNum');
+  const qTotal    = document.getElementById('qTotal');
+  const qScore    = document.getElementById('qScore');
+  const qText     = document.getElementById('questionText');
+  const optBtns   = document.querySelectorAll('.option-btn');
+  const feedback  = document.getElementById('qFeedback');
+  const nextBtn   = document.getElementById('qNextBtn');
+  const result    = document.getElementById('quizResult');
+  const finalScoreEl = document.getElementById('finalScore');
+  const restartBtn   = document.getElementById('qRestartBtn');
+
+  if (!qNum) return; // quiz slide not present
+
+  qTotal.textContent = quizData.length;
+
+  function loadQuestion(idx) {
+    answered = false;
+    const q = quizData[idx];
+    qNum.textContent  = idx + 1;
+    qText.textContent = q.question;
+    feedback.textContent = '';
+    nextBtn.style.display = 'none';
+
+    optBtns.forEach((btn, i) => {
+      btn.textContent = q.options[i];
+      btn.className   = 'option-btn';
+      btn.disabled    = false;
+    });
+  }
+
+  optBtns.forEach(btn => {
+    btn.addEventListener('click', function () {
+      if (answered) return;
+      answered = true;
+
+      const chosen  = parseInt(this.dataset.index);
+      const correct = quizData[current].correct;
+
+      // Disable all
+      optBtns.forEach(b => b.disabled = true);
+
+      if (chosen === correct) {
+        this.classList.add('correct');
+        feedback.textContent = '✅ ശരിയാണ്!';
+        feedback.style.color = '#28a745';
+        score++;
+        qScore.textContent = score;
+      } else {
+        this.classList.add('wrong');
+        optBtns[correct].classList.add('correct');
+        feedback.textContent = '❌ തെറ്റ്. ശരിയുത്തരം ഹൈലൈറ്റ് ചെയ്തിരിക്കുന്നു.';
+        feedback.style.color = '#dc3545';
+      }
+
+      nextBtn.style.display = current < quizData.length - 1 ? 'block' : 'none';
+
+      // Last question — show result after short delay
+      if (current === quizData.length - 1) {
+        setTimeout(() => {
+          document.querySelector('.q-box').style.display       = 'none';
+          document.getElementById('optionsGrid').style.display = 'none';
+          feedback.style.display  = 'none';
+          nextBtn.style.display   = 'none';
+          finalScoreEl.textContent = score + ' / ' + quizData.length;
+          result.style.display    = 'flex';
+        }, 1400);
+      }
+    });
+  });
+
+  nextBtn.addEventListener('click', () => {
+    current++;
+    loadQuestion(current);
+  });
+
+  restartBtn.addEventListener('click', () => {
+    current = 0; score = 0;
+    qScore.textContent = 0;
+    result.style.display = 'none';
+    document.querySelector('.q-box').style.display       = '';
+    document.getElementById('optionsGrid').style.display = '';
+    feedback.style.display = '';
+    loadQuestion(0);
+  });
+
+  loadQuestion(0);
+})();
+</script>

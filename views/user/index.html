@@ -1,54 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contents</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/index.css">
-</head>
+    <title>Folklore Integrated Instructional Package</title>
+    <style>
+        /* General Body Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f0e3; /* Softer, lighter parchment */
+            font-family: 'Noto Sans Malayalam', 'Noto Serif Malayalam', 'Rachana', 'Manjari', 'Georgia', serif;
+            color: #3d2a1f; /* Darker, richer text color */
+            text-align: center;
+            line-height: 1.6;
+        }
 
+        /* Container for content and background elements */
+        .page-container {
+            position: relative;
+            min-height: 100vh;
+            padding: 80px 40px; /* More padding for better visual spacing */
+            max-width: 1200px; /* Slightly wider for better text flow */
+            margin: 0 auto; /* Center the main content area */
+            background-color: rgba(255, 255, 255, 0.7); /* Slight translucent background for main content */
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+            border: 1px solid #d3c4a6; /* Subtle border */
+            border-radius: 8px; /* Slightly rounded corners */
+            overflow: hidden; /* Hide overflowing background elements */
+        }
+
+        /* Lamp Image Styling */
+        .lantern-image {
+            position: absolute;
+            left: -50px; /* Adjust left to peek in more naturally */
+            top: 0;
+            height: 100%;
+            width: auto;
+            object-fit: cover;
+            opacity: 0.6; /* Slightly less opaque to blend more */
+            z-index: -1; /* Keep it behind content */
+            filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.3)); /* Add a subtle shadow to the lamp */
+        }
+
+        /* Title Section Styling */
+        .title-section {
+            max-width: 1000px; /* Max width for title text */
+            margin: 0 auto 50px auto; /* Add more bottom margin */
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2); /* More prominent shadow for title */
+        }
+
+        .title-section p {
+            font-family: 'Playfair Display', serif; /* A more decorative font for titles */
+            font-size: 2.8em; /* Larger title font */
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 0 0 15px 0; /* Spacing between title lines */
+            color: #5a3d2e; /* Richer title color */
+            text-transform: uppercase;
+            letter-spacing: 1px; /* Add some letter spacing */
+        }
+
+        .title-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Divider Space */
+        .spacer {
+            height: 80px; /* Reduced spacer height */
+        }
+
+        /* Credits Section Styling */
+        .credits-section {
+            display: flex;
+            justify-content: space-around;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left;
+            font-size: 1.5em; /* Adjusted font size for balance */
+            font-weight: normal;
+            color: #4a382d;
+            border-top: 1px solid #d3c4a6; /* A subtle separator */
+            padding-top: 30px;
+        }
+
+        .credits-section div {
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .credits-section p {
+            margin: 8px 0;
+            font-family: 'Lora', serif; /* A gentle serif for body text */
+        }
+
+        .credits-section .role-title {
+            font-size: 1.6em; /* Larger role titles */
+            font-weight: 700;
+            margin-bottom: 30px; /* More space below role titles */
+            color: #5a3d2e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Next Page Button Styling */
+        .next-page-button {
+            position: absolute;
+            bottom: 20px; /* Adjust as needed for vertical position */
+            right: 140px; /* Adjust as needed for horizontal position */
+            background-color: #7a5d4d; /* Button background color */
+            color: #f8f0e3; /* Button text color */
+            padding: 12px 25px;
+            text-decoration: none; /* Remove underline from link */
+            border-radius: 5px;
+            font-family: 'Noto Sans Malayalam', 'Noto Serif Malayalam', 'Rachana', 'Manjari', 'Georgia', serif;
+            font-weight: bold;
+            font-size: .8em;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover effect */
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for button */
+            z-index: 10; /* Ensure button is on top */
+        }
+
+        .next-page-button:hover {
+            background-color: #5a3d2e; /* Darker on hover */
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 40px 20px;
+            }
+            .title-section p {
+                font-size: 1.8em;
+            }
+            .credits-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .credits-section div {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+            .credits-section .role-title {
+                font-size: 1.4em;
+                margin-bottom: 15px;
+            }
+            .next-page-button {
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
 <body>
 
     <div class="page-container">
-        <div class="top-section">
+        
+        <img src="[YOUR_TRANSPARENT_LAMP_IMAGE_URL_HERE]" alt="Decorative Lantern" class="lantern-image">
 
-            <h1 class="malayalam-title">ഉള്ളടക്കം</h1>
+        <div style="position: absolute; top: 20px; left: 20px; width: 100px; height: 100px; opacity: 0.5; z-index: 0;">
+            <svg viewBox="0 0 100 100" style="fill:#b5a083;">
+                <path d="M0,0 C50,0 100,50 100,100 L100,0 L0,0 Z"></path>
+                <path d="M10,10 C40,10 90,40 90,90 L90,10 L10,10 Z" style="fill:#a08e75;"></path>
+            </svg>
+        </div>
+        <div style="position: absolute; bottom: 20px; right: 20px; width: 100px; height: 100px; opacity: 0.5; z-index: 0; transform: rotate(180deg);">
+            <svg viewBox="0 0 100 100" style="fill:#b5a083;">
+                <path d="M0,0 C50,0 100,50 100,100 L100,0 L0,0 Z"></path>
+                <path d="M10,10 C40,10 90,40 90,90 L90,10 L10,10 Z" style="fill:#a08e75;"></path>
+            </svg>
         </div>
 
-        <ul class="topics-list">
-            <li>
-                <div class="topic-left">
-                    <span class="hand-icon">
-                    </span>
-                    <a href="/contents/topic1.html" class="topic-link">ഫോക്ക്‌ലോറും ഉത്പത്തിയും</a>
-                </div>
-                <a href="/quiz-slide.html" class="question-btn">Questions
-                    <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path
-                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
-                    </svg>
-                </a>
-            </li>
-            <li>
-                <div class="topic-left">
-                    <span class="hand-icon">
-                    </span>
-                    <a href="/contents/topic2.html" class="topic-link">കുഞ്ചൻ നമ്പ്യാരും തുള്ളലിൻ്റെ ജനപ്രിയതയും</a>
-                </div>
-                <a href="/quiz-slide.html" class="question-btn">Questions
-                    <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path
-                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
-                    </svg>
-                </a>
-            </li>
-        </ul>
-    </div>
+        <div class="title-section">
+            <p>DEVELOPMENT OF FOLKLORE INTEGRATED INSTRUCTIONAL PACKAGE</p>
+            <p>FOR ENHANCING AESTHETIC APPRECIATION AND ACHIEVEMENT IN</p>
+            <p>MALAYALAM AMOUNG SECONDARY SCHOOL STUDENTS</p>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="credits-section">
+            <div style="width: 45%;">
+                <p class="role-title">Supervised by:</p>
+                <p>Dr. Vidhya v.s</p>
+                <p>Asst.proffesor</p>
+                <p>School of pedagogical sciences</p>
+                <p>Kannur University</p>
+            </div>
+
+            <div style="width: 45%; text-align: right;">
+                <p class="role-title">prepared by:</p>
+                <p>Nithyasree T</p>
+                <p>MEd</p>
+                <p>School of pedagogical Sciences</p>
+                <p>Kannur University</p>
+            </div>
+        </div>
+
+    <a href="topicList.html" class="next-page-button">Next Page &raquo;</a> 
+        </div>
 
 </body>
-
 </html>

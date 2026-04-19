@@ -1,0 +1,387 @@
+<!-- ===================================================
+     QUIZ SLIDE — drop this <div class="slide"> block
+     anywhere inside your .slides-wrapper
+     =================================================== -->
+
+<div class="slide">
+  <div class="topic-header">
+    <h1>ചോദ്യോത്തര മത്സരം</h1>
+  </div>
+  <div class="preview">
+    <div class="quiz-container">
+
+      <!-- Question counter -->
+      <div class="quiz-meta">
+        <span class="q-badge">ചോദ്യം <span id="qNum">1</span> / <span id="qTotal">3</span></span>
+        <span class="q-score">സ്കോർ: <span id="qScore">0</span></span>
+      </div>
+
+      <!-- Question text -->
+      <div class="q-box">
+        <p id="questionText"></p>
+      </div>
+
+      <!-- 4 Options -->
+      <div class="options-grid" id="optionsGrid">
+        <button class="option-btn" data-index="0"></button>
+        <button class="option-btn" data-index="1"></button>
+        <button class="option-btn" data-index="2"></button>
+        <button class="option-btn" data-index="3"></button>
+      </div>
+
+      <!-- Feedback -->
+      <div class="q-feedback" id="qFeedback"></div>
+
+      <!-- Next button -->
+      <button class="q-next-btn" id="qNextBtn" style="display:none;">അടുത്ത ചോദ്യം →</button>
+
+      <!-- Result screen (hidden until end) -->
+      <div class="quiz-result" id="quizResult" style="display:none;">
+        <h2>🎉 ക്വിസ് പൂർത്തിയായി!</h2>
+        <p>നിങ്ങളുടെ സ്കോർ: <strong id="finalScore"></strong></p>
+        <button class="q-next-btn" id="qRestartBtn">വീണ്ടും ശ്രമിക്കുക</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================================================
+     CSS
+     =================================================== -->
+<style>
+/* ── Quiz container ───────────────────────────── */
+.quiz-container {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Meta bar */
+.quiz-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  color: #7a5d4d;
+}
+
+.q-badge {
+  background: #7a5d4d;
+  color: #f8f0e3;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.9em;
+}
+
+.q-score {
+  font-weight: bold;
+  color: #5a3d2e;
+}
+
+/* Question box */
+.q-box {
+  background: #fff8f0;
+  border: 2px solid #d3c4a6;
+  border-radius: 10px;
+  padding: 18px 22px;
+}
+
+.q-box p {
+  font-size: clamp(1rem, 2.8vw, 1.25rem);
+  color: #3a2510;
+  line-height: 1.7;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Options grid */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 500px) {
+  .options-grid { grid-template-columns: 1fr; }
+}
+
+.option-btn {
+  background: #fff8f0;
+  border: 2px solid #d3c4a6;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: clamp(0.85rem, 2.2vw, 1.05rem);
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  color: #3a2510;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s, transform 0.1s;
+  line-height: 1.5;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: #f0e0cc;
+  border-color: #7a5d4d;
+  transform: translateY(-2px);
+}
+
+.option-btn.correct {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+  font-weight: bold;
+}
+
+.option-btn.wrong {
+  background: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+}
+
+.option-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* Feedback */
+.q-feedback {
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: bold;
+  min-height: 1.5em;
+  text-align: center;
+  color: #5a3d2e;
+}
+
+/* Next button */
+.q-next-btn {
+  align-self: flex-end;
+  background: #7a5d4d;
+  color: #f8f0e3;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 26px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.q-next-btn:hover {
+  background: #5a3d2e;
+  transform: translateY(-2px);
+}
+
+/* Result screen */
+.quiz-result {
+  background: #fff8f0;
+  border: 2px solid #d3c4a6;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.quiz-result h2 {
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  color: #5a3d2e;
+}
+
+.quiz-result p {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: #3a2510;
+}
+
+/* Essay textarea */
+#essayInput {
+  width: 100%;
+  min-height: 150px;
+  padding: 14px;
+  border: 2px solid #d3c4a6;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  color: #3a2510;
+  background: #fff8f0;
+  resize: vertical;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+#essayInput:focus {
+  outline: none;
+  border-color: #7a5d4d;
+}
+</style>
+
+
+<!-- ===================================================
+     JS
+     =================================================== -->
+<script>
+const quizData = [
+  {
+    question: "ഈ പാഠഭാഗത്തിലെ പ്രധാന ആശയം എന്താണ്?",
+    options: ["ഭക്ഷണത്തിൻറെ മഹത്ത്വം", "ആഹാരം അമിതമായി കഴിക്കുന്നതിലെ അപാകത","സദ്യയുടെ ആർഭാട","ഇതൊന്നുമല്ല"],
+    correct: 1
+  },
+  {
+    question: "ഭക്ഷണപ്പുരയിലെ വിളമ്പുകാരെകുറിച്ച് കവി എന്താണ് പറയുന്നത് ?",
+    options: ["യാതൊരു മടിയും കൂടാതെ വിളമ്പുന്നവർ", "വിളമ്പുന്നതിൽ പിശുക്ക് കാട്ടുന്നവർ","വിളമ്പാതെ ഒളിച്ചു നടക്കുന്നവർ","ഭക്ഷണം പാഴാക്കുന്നവർ"],
+    correct: 0
+  },
+  {
+    question: "പഞ്ചേന്ദ്രോപാഖ്യാനം ഏതുതരം തുള്ളലാണ് ?",
+    options: ["ഓട്ടൻതുള്ളൽ", "പറയൻ തുള്ളൽ", "ശീതങ്കൻതുള്ളൽ", "ഇതൊന്നുമല്ല"],
+    correct: 1
+  }
+];
+
+(function initQuiz() {
+  let current  = 0;
+  let score    = 0;
+  let answered = false;
+
+  const qNum         = document.getElementById('qNum');
+  const qTotal       = document.getElementById('qTotal');
+  const qScore       = document.getElementById('qScore');
+  const qText        = document.getElementById('questionText');
+  const optBtns      = document.querySelectorAll('.option-btn');
+  const feedback     = document.getElementById('qFeedback');
+  const nextBtn      = document.getElementById('qNextBtn');
+  const result       = document.getElementById('quizResult');
+  const finalScoreEl = document.getElementById('finalScore');
+  const restartBtn   = document.getElementById('qRestartBtn');
+  const optionsGrid  = document.getElementById('optionsGrid');
+  const qBox         = document.querySelector('.q-box');
+
+  if (!qNum) return;
+
+  qTotal.textContent = quizData.length;
+
+  // create essay textarea once
+  const essayInput = document.createElement('textarea');
+  essayInput.id = 'essayInput';
+  essayInput.placeholder = 'നിങ്ങളുടെ ഉത്തരം ഇവിടെ എഴുതുക...';
+  essayInput.style.display = 'none';
+  optionsGrid.insertAdjacentElement('afterend', essayInput);
+
+  function loadQuestion(idx) {
+    answered = false;
+    const q = quizData[idx];
+    qNum.textContent     = idx + 1;
+    qText.textContent    = q.question;
+    feedback.textContent = '';
+    feedback.style.display = '';
+    nextBtn.style.display  = 'none';
+    nextBtn.textContent    = 'അടുത്ത ചോദ്യം →';
+
+    if (q.type === 'essay') {
+      // hide options, show textarea
+      optionsGrid.style.display  = 'none';
+      essayInput.style.display   = 'block';
+      essayInput.value           = '';
+      nextBtn.style.display      = 'block';
+      nextBtn.textContent        = 'സമർപ്പിക്കുക ✓';
+      answered = true;
+      return;
+    }
+
+    // normal question
+    optionsGrid.style.display = 'grid';
+    essayInput.style.display  = 'none';
+
+    optBtns.forEach((btn, i) => {
+      btn.textContent = q.options[i] || '';
+      btn.className   = 'option-btn';
+      btn.disabled    = false;
+      // hide unused buttons (e.g. for 2-option questions)
+      btn.style.display = q.options[i] !== undefined ? '' : 'none';
+    });
+  }
+
+  optBtns.forEach(btn => {
+    btn.addEventListener('click', function () {
+      if (answered) return;
+      answered = true;
+
+      const chosen  = parseInt(this.dataset.index);
+      const correct = quizData[current].correct;
+
+      optBtns.forEach(b => b.disabled = true);
+
+      if (chosen === correct) {
+        this.classList.add('correct');
+        feedback.textContent   = '✅ ശരിയാണ്!';
+        feedback.style.color   = '#28a745';
+        score++;
+        qScore.textContent = score;
+      } else {
+        this.classList.add('wrong');
+        optBtns[correct].classList.add('correct');
+        feedback.textContent = '❌ തെറ്റ്. ശരിയുത്തരം ഹൈലൈറ്റ് ചെയ്തിരിക്കുന്നു.';
+        feedback.style.color = '#dc3545';
+      }
+
+      // show next button if not last question
+      if (current < quizData.length - 1) {
+        nextBtn.style.display = 'block';
+      } else {
+        // last MCQ — show result
+        showResult();
+      }
+    });
+  });
+
+  nextBtn.addEventListener('click', () => {
+    const q = quizData[current];
+
+    if (q.type === 'essay') {
+      if (essayInput.value.trim() === '') {
+        feedback.textContent   = '✏️ ദയവായി ഉത്തരം എഴുതുക.';
+        feedback.style.color   = '#dc3545';
+        return;
+      }
+      showResult();
+      return;
+    }
+
+    current++;
+    loadQuestion(current);
+  });
+
+  function showResult() {
+    setTimeout(() => {
+      qBox.style.display           = 'none';
+      optionsGrid.style.display    = 'none';
+      essayInput.style.display     = 'none';
+      feedback.style.display       = 'none';
+      nextBtn.style.display        = 'none';
+      // essay question not counted in score
+      const scoreable = quizData.filter(q => !q.type).length;
+      finalScoreEl.textContent     = score + ' / ' + scoreable;
+      result.style.display         = 'flex';
+    }, 400);
+  }
+
+  restartBtn.addEventListener('click', () => {
+    current = 0;
+    score   = 0;
+    qScore.textContent       = 0;
+    result.style.display     = 'none';
+    qBox.style.display       = '';
+    feedback.style.display   = '';
+    loadQuestion(0);
+  });
+
+  loadQuestion(0);
+})();
+</script>

@@ -1,0 +1,530 @@
+<!-- ===================================================
+     QUIZ SLIDE — drop this <div class="slide"> block
+     anywhere inside your .slides-wrapper
+     =================================================== -->
+
+<div class="slide">
+  <div class="topic-header">
+    <h1>ചോദ്യോത്തര മത്സരം</h1>
+  </div>
+  <div class="preview">
+    <div class="quiz-container">
+
+      <!-- Question counter -->
+      <div class="quiz-meta">
+        <span class="q-badge">ചോദ്യം <span id="qNum">1</span> / <span id="qTotal">3</span></span>
+        <span class="q-score">സ്കോർ: <span id="qScore">0</span></span>
+      </div>
+
+      <!-- Question text -->
+      <div class="q-box">
+        <p id="questionText"></p>
+      </div>
+
+      <!-- 4 Options -->
+      <div class="options-grid" id="optionsGrid">
+        <button class="option-btn" data-index="0"></button>
+        <button class="option-btn" data-index="1"></button>
+        <button class="option-btn" data-index="2"></button>
+        <button class="option-btn" data-index="3"></button>
+      </div>
+
+      <!-- Text input for Q2 -->
+      <div class="q-input-container" id="qInputContainer" style="display:none;">
+        <input type="text" id="qTextInput" class="q-text-input" placeholder="ഉത്തരം എഴുതുക...">
+      </div>
+
+      <!-- Text input for Q2 -->
+      <div class="q-input-container" id="qInputContainer" style="display:none;">
+        <input type="text" id="qTextInput" class="q-text-input" placeholder="ഉത്തരം എഴുതുക...">
+      </div>
+
+      <!-- Feedback -->
+      <div class="q-feedback" id="qFeedback"></div>
+
+      <!-- Next button -->
+      <button class="q-next-btn" id="qNextBtn" style="display:none;">അടുത്ത ചോദ്യം →</button>
+
+      <!-- Result screen (hidden until end) -->
+      <div class="quiz-result" id="quizResult" style="display:none;">
+        <h2>🎉 ക്വിസ് പൂർത്തിയായി!</h2>
+        <p>നിങ്ങളുടെ സ്കോർ: <strong id="finalScore"></strong></p>
+        <button class="q-next-btn" id="qRestartBtn">വീണ്ടും ശ്രമിക്കുക</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================================================
+     CSS
+     =================================================== -->
+<style>
+  /* ── Quiz container ───────────────────────────── */
+  .quiz-container {
+    width: 100%;
+    max-width: 860px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Meta bar */
+  .quiz-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    color: #7a5d4d;
+  }
+
+  .q-badge {
+    background: #7a5d4d;
+    color: #f8f0e3;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.9em;
+  }
+
+  .q-score {
+    font-weight: bold;
+    color: #5a3d2e;
+  }
+
+  /* Question box */
+  .q-box {
+    background: #fff8f0;
+    border: 2px solid #d3c4a6;
+    border-radius: 10px;
+    padding: 18px 22px;
+  }
+
+  .q-box p {
+    font-size: clamp(1rem, 2.8vw, 1.25rem);
+    color: #3a2510;
+    line-height: 1.7;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  /* Options grid */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 500px) {
+    .options-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .option-btn {
+    background: #fff8f0;
+    border: 2px solid #d3c4a6;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: clamp(0.85rem, 2.2vw, 1.05rem);
+    font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+    color: #3a2510;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    line-height: 1.5;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    background: #f0e0cc;
+    border-color: #7a5d4d;
+    transform: translateY(-2px);
+  }
+
+  .option-btn.correct {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+    font-weight: bold;
+  }
+
+  .option-btn.wrong {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+  }
+
+  .option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.85;
+  }
+
+  /* Text input container */
+  .q-input-container {
+    margin-top: 10px;
+  }
+
+  .q-text-input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #d3c4a6;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+    color: #3a2510;
+    background: #fff8f0;
+    box-sizing: border-box;
+  }
+
+  .q-text-input:focus {
+    outline: none;
+    border-color: #7a5d4d;
+  }
+
+  /* Text input container */
+  .q-input-container {
+    margin-top: 10px;
+  }
+
+  .q-text-input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #d3c4a6;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+    color: #3a2510;
+    background: #fff8f0;
+    box-sizing: border-box;
+  }
+
+  .q-text-input:focus {
+    outline: none;
+    border-color: #7a5d4d;
+  }
+
+  /* Feedback */
+  .q-feedback {
+    font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    font-weight: bold;
+    min-height: 1.5em;
+    text-align: center;
+    color: #5a3d2e;
+  }
+
+  /* Next button */
+  .q-next-btn {
+    align-self: flex-end;
+    background: #7a5d4d;
+    color: #f8f0e3;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 26px;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .q-next-btn:hover {
+    background: #5a3d2e;
+    transform: translateY(-2px);
+  }
+
+  /* Result screen */
+  .quiz-result {
+    background: #fff8f0;
+    border: 2px solid #d3c4a6;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .quiz-result h2 {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    color: #5a3d2e;
+  }
+
+  .quiz-result p {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: #3a2510;
+  }
+
+  /* Essay textarea */
+  #essayInput {
+    width: 100%;
+    min-height: 150px;
+    padding: 14px;
+    border: 2px solid #d3c4a6;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+    color: #3a2510;
+    background: #fff8f0;
+    resize: vertical;
+    margin-top: 10px;
+    box-sizing: border-box;
+  }
+
+  #essayInput:focus {
+    outline: none;
+    border-color: #7a5d4d;
+  }
+</style>
+
+
+<!-- ===================================================
+     JS
+     =================================================== -->
+<script>
+  const quizData = [
+    {
+      question: "പഴഞ്ചൊല്ലുകൾ ഫോക്‌ലോർ ഭാഗമല്ല",
+      options: ["ശരി", "തെറ്റ്"],
+      correct: 0
+    },
+    {
+      question: `"വിതച്ചവൻ____ "എന്ന പഴഞ്ചൊല്ല് പരിശ്രമത്തിൻ്റ മൂല്യം വ്യക്തമാക്കുന്നു.`,
+      type: "input",
+      answer: "കൊയ്യും",
+      options: [],
+      correct: null
+    },
+    {
+      question: "അന്നവിചാരം, മുന്ന വിചാരം എന്ന പഴഞ്ചൊല്ല് എന്തിൻ്റെ പ്രാധാന്യത്തെയാണ് സൂചിപ്പിക്കുന്നത്?",
+      options: ["ാവിയെക്കുറിച്ചുള്ള ചിന്ത", "ഭക്ഷണത്തെക്കുറിച്ചുള്ള ചിന്ത", "തീരുമാനങ്ങൾ എടുക്കുന്നതിലെ ശ്രദ്ധ", "സമ്പാദ്യ ശീലം"],
+      correct: 2
+    },
+    {
+      question: `"അത്താഴം അരവയറ്"
+"അന്നവിചാരം മുന്ന വിചാരം
+പിന്നെ വിചാരം കാര്യവിചാരം"
+ഇതുപോലുള്ള ഭക്ഷണം, കൃഷി എന്നിവയുമായി ബന്ധപ്പെട്ട പഴഞ്ചൊല്ലുകൾ ശേഖരിച്ച് ഡിജിറ്റൽ പഴഞ്ചൊൽ പതിപ്പ് തയ്യാറാക്കുക`,
+      type: "text",
+      options: [],
+      correct: null
+    }
+  ];
+
+  (function initQuiz() {
+    let current = 0;
+    let score = 0;
+    let answered = false;
+
+    const qNum = document.getElementById('qNum');
+    const qTotal = document.getElementById('qTotal');
+    const qScore = document.getElementById('qScore');
+    const qText = document.getElementById('questionText');
+    const optBtns = document.querySelectorAll('.option-btn');
+    const feedback = document.getElementById('qFeedback');
+    const nextBtn = document.getElementById('qNextBtn');
+    const result = document.getElementById('quizResult');
+    const finalScoreEl = document.getElementById('finalScore');
+    const restartBtn = document.getElementById('qRestartBtn');
+    const optionsGrid = document.getElementById('optionsGrid');
+    const qBox = document.querySelector('.q-box');
+    const qInputContainer = document.getElementById('qInputContainer');
+    const qTextInput = document.getElementById('qTextInput');
+
+    if (!qNum) return;
+
+    qTotal.textContent = quizData.length;
+
+    // create essay textarea once
+    const essayInput = document.createElement('textarea');
+    essayInput.id = 'essayInput';
+    essayInput.placeholder = 'നിങ്ങളുടെ ഉത്തരം ഇവിടെ എഴുതുക...';
+    essayInput.style.display = 'none';
+    optionsGrid.insertAdjacentElement('afterend', essayInput);
+
+    function loadQuestion(idx) {
+      answered = false;
+      const q = quizData[idx];
+      qNum.textContent = idx + 1;
+      qText.textContent = q.question;
+      feedback.textContent = '';
+      feedback.style.display = '';
+      nextBtn.style.display = 'none';
+      nextBtn.textContent = 'അടുത്ത ചോദ്യം →';
+
+      if (q.type === 'input') {
+        // hide options, show text input
+        optionsGrid.style.display = 'none';
+        qInputContainer.style.display = 'block';
+        qTextInput.value = '';
+        nextBtn.style.display = 'block';
+        nextBtn.textContent = 'സമർപ്പിക്കുക ✓';
+        answered = true;
+        return;
+      }
+
+      if (q.type === 'text') {
+        // text input without verification
+        optionsGrid.style.display = 'none';
+        qInputContainer.style.display = 'block';
+        qTextInput.value = '';
+        qTextInput.disabled = false;
+        nextBtn.style.display = 'block';
+        nextBtn.textContent = 'അടുത്ത ചോദ്യം →';
+        answered = true;
+        // Focus the input field
+        setTimeout(() => qTextInput.focus(), 100);
+        return;
+      }
+
+      if (q.type === 'essay') {
+        // hide options, show textarea
+        optionsGrid.style.display = 'none';
+        essayInput.style.display = 'block';
+        essayInput.value = '';
+        nextBtn.style.display = 'block';
+        nextBtn.textContent = 'സമർപ്പിക്കുക ✓';
+        answered = true;
+        return;
+      }
+
+      // normal question
+      optionsGrid.style.display = 'grid';
+      essayInput.style.display = 'none';
+      qInputContainer.style.display = 'none';
+
+      optBtns.forEach((btn, i) => {
+        btn.textContent = q.options[i] || '';
+        btn.className = 'option-btn';
+        btn.disabled = false;
+        // hide unused buttons (e.g. for 2-option questions)
+        btn.style.display = q.options[i] !== undefined ? '' : 'none';
+      });
+    }
+
+    optBtns.forEach(btn => {
+      btn.addEventListener('click', function () {
+        if (answered) return;
+        answered = true;
+
+        const chosen = parseInt(this.dataset.index);
+        const correct = quizData[current].correct;
+
+        optBtns.forEach(b => b.disabled = true);
+
+        if (chosen === correct) {
+          this.classList.add('correct');
+          feedback.textContent = '✅ ശരിയാണ്!';
+          feedback.style.color = '#28a745';
+          score++;
+          qScore.textContent = score;
+        } else {
+          this.classList.add('wrong');
+          optBtns[correct].classList.add('correct');
+          feedback.textContent = '❌ തെറ്റ്. ശരിയുത്തരം ഹൈലൈറ്റ് ചെയ്തിരിക്കുന്നു.';
+          feedback.style.color = '#dc3545';
+        }
+
+        // show next button if not last question
+        if (current < quizData.length - 1) {
+          nextBtn.style.display = 'block';
+        } else {
+          // last MCQ — show result
+          showResult();
+        }
+      });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const q = quizData[current];
+
+      if (q.type === 'input') {
+        if (qTextInput.value.trim() === '') {
+          feedback.textContent = '✏️ ദയവായി ഉത്തരം എഴുതുക.';
+          feedback.style.color = '#dc3545';
+          return;
+        }
+        // Check if answer is correct (case-insensitive)
+        const userAnswer = qTextInput.value.trim();
+        const correctAnswer = q.answer.trim();
+        if (userAnswer === correctAnswer) {
+          feedback.textContent = '✅ ശരിയാണ്!';
+          feedback.style.color = '#28a745';
+          score++;
+          qScore.textContent = score;
+        } else {
+          feedback.textContent = '❌ തെറ്റ്. ശരിയുത്തരം: ' + correctAnswer;
+          feedback.style.color = '#dc3545';
+        }
+        qTextInput.disabled = true;
+        nextBtn.style.display = 'none';
+        // Move to next question after short delay
+        setTimeout(() => {
+          if (current < quizData.length - 1) {
+            current++;
+            loadQuestion(current);
+          } else {
+            showResult();
+          }
+        }, 1500);
+        return;
+      }
+
+      if (q.type === 'essay') {
+        if (essayInput.value.trim() === '') {
+          feedback.textContent = '✏️ ദയവായി ഉത്തരം എഴുതുക.';
+          feedback.style.color = '#dc3545';
+          return;
+        }
+        showResult();
+        return;
+      }
+
+      if (q.type === 'text') {
+        // Just move to next question without verification
+        if (current < quizData.length - 1) {
+          current++;
+          loadQuestion(current);
+        } else {
+          showResult();
+        }
+        return;
+      }
+
+      current++;
+      loadQuestion(current);
+    });
+
+    function showResult() {
+      setTimeout(() => {
+        qBox.style.display = 'none';
+        optionsGrid.style.display = 'none';
+        essayInput.style.display = 'none';
+        qInputContainer.style.display = 'none';
+        feedback.style.display = 'none';
+        nextBtn.style.display = 'none';
+        // essay question not counted in score
+        const scoreable = quizData.filter(q => !q.type).length;
+        finalScoreEl.textContent = score + ' / ' + scoreable;
+        result.style.display = 'flex';
+      }, 400);
+    }
+
+    restartBtn.addEventListener('click', () => {
+      current = 0;
+      score = 0;
+      qScore.textContent = 0;
+      result.style.display = 'none';
+      qBox.style.display = '';
+      feedback.style.display = '';
+      optionsGrid.style.display = 'grid';
+      qInputContainer.style.display = 'none';
+      qTextInput.disabled = false;
+      essayInput.style.display = 'none';
+      loadQuestion(0);
+    });
+
+    loadQuestion(0);
+  })();
+</script>

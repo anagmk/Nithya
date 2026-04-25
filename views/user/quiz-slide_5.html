@@ -1,6 +1,5 @@
 <!-- ===================================================
-     QUIZ SLIDE — drop this <div class="slide"> block
-     anywhere inside your .slides-wrapper
+     QUIZ SLIDE
      =================================================== -->
 
 <div class="slide">
@@ -239,7 +238,86 @@
   outline: none;
   border-color: #7a5d4d;
 }
-</style>
+
+/* File upload section */
+.file-upload-section {
+  margin-top: 14px;
+  padding: 16px;
+  background: #fff8f0;
+  border: 2px dashed #d3c4a6;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: #7a5d4d;
+  color: #f8f0e3;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  font-size: 0.95rem;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.upload-label:hover {
+  background: #5a3d2e;
+  transform: translateY(-2px);
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-icon {
+  font-size: 1.2rem;
+}
+
+.file-preview {
+  margin-top: 12px;
+  padding: 10px;
+  background: #f0e0cc;
+  border-radius: 8px;
+  display: none;
+}
+
+.file-preview.has-file {
+  display: block;
+}
+
+.file-preview img {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 6px;
+}
+
+.file-preview .file-name {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #5a3d2e;
+  font-weight: bold;
+}
+
+.remove-file-btn {
+  margin-top: 10px;
+  padding: 6px 14px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+}
+
+.remove-file-btn:hover {
+  background: #c82333;
+}
+</style>   <!-- ✅ THIS WAS THE MISSING CLOSING TAG -->
 
 
 <!-- ===================================================
@@ -260,7 +338,7 @@ const quizData = [
   },
   {
     question: "സമകാലിക പ്രശ്നങ്ങൾ ചർച്ച ചെയ്യുന്ന വിഷയങ്ങൾ കണ്ടെത്തി കാർട്ടൂൺ, റീൽസ് എന്നിവ തയ്യാറാക്കുക",
-    type: "essay",
+    type: "upload",
     options: [],
     correct: null
   }
@@ -297,6 +375,74 @@ const quizData = [
   essayInput.style.display = 'none';
   optionsGrid.insertAdjacentElement('afterend', essayInput);
 
+  // create file upload section
+  const essaySection = document.createElement('div');
+  essaySection.id = 'essaySection';
+  essaySection.style.display = 'none';
+  essayInput.insertAdjacentElement('afterend', essaySection);
+
+  const fileUploadSection = document.createElement('div');
+  fileUploadSection.className = 'file-upload-section';
+
+  const uploadLabel = document.createElement('label');
+  uploadLabel.className = 'upload-label';
+  uploadLabel.innerHTML = '<span class="upload-icon">📎</span><span class="upload-text">ഫയൽ അപ്‌ലോഡ് ചെയ്യാനുള്ള ഓപ്ഷൻ</span>';
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.id = 'answerFile';
+  fileInput.className = 'file-input';
+  fileInput.accept = 'image/*,.pdf,.doc,.docx,.txt';
+
+  const filePreview = document.createElement('div');
+  filePreview.id = 'filePreview';
+  filePreview.className = 'file-preview';
+
+  const removeFileBtn = document.createElement('button');
+  removeFileBtn.type = 'button';
+  removeFileBtn.id = 'removeFileBtn';
+  removeFileBtn.className = 'remove-file-btn';
+  removeFileBtn.textContent = '✕ ഫയൽ നീക്കം ചെയ്യുക';
+  removeFileBtn.style.display = 'none';
+
+  uploadLabel.appendChild(fileInput);
+  fileUploadSection.appendChild(uploadLabel);
+  fileUploadSection.appendChild(filePreview);
+  fileUploadSection.appendChild(removeFileBtn);
+  essaySection.appendChild(essayInput);
+  essaySection.appendChild(fileUploadSection);
+
+  let uploadedFile = null;
+
+  // File input event listener
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      uploadedFile = file;
+      filePreview.className = 'file-preview has-file';
+      
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          filePreview.innerHTML = '<img src="' + e.target.result + '" alt="Uploaded file"><span class="file-name">' + file.name + '</span>';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        filePreview.innerHTML = '<span class="file-name">📄 ' + file.name + '</span>';
+      }
+      removeFileBtn.style.display = 'inline-block';
+    }
+  });
+
+  // Remove file button event listener
+  removeFileBtn.addEventListener('click', function() {
+    uploadedFile = null;
+    fileInput.value = '';
+    filePreview.className = 'file-preview';
+    filePreview.innerHTML = '';
+    removeFileBtn.style.display = 'none';
+  });
+
   function loadQuestion(idx) {
     answered = false;
     const q = quizData[idx];
@@ -316,10 +462,34 @@ const quizData = [
     }
 
     if (q.type === 'essay') {
-      // hide options, show textarea
+      // hide options, show textarea and file upload
       optionsGrid.style.display  = 'none';
       essayInput.style.display   = 'block';
+      essaySection.style.display = 'block';
       essayInput.value           = '';
+      // Reset file upload
+      uploadedFile = null;
+      fileInput.value = '';
+      filePreview.className = 'file-preview';
+      filePreview.innerHTML = '';
+      removeFileBtn.style.display = 'none';
+      nextBtn.style.display      = 'block';
+      nextBtn.textContent        = 'സമർപ്പിക്കുക ✓';
+      answered = true;
+      return;
+    }
+
+    if (q.type === 'upload') {
+      // hide options, show only file upload (no textarea)
+      optionsGrid.style.display  = 'none';
+      essayInput.style.display   = 'none';
+      essaySection.style.display = 'block';
+      // Reset file upload
+      uploadedFile = null;
+      fileInput.value = '';
+      filePreview.className = 'file-preview';
+      filePreview.innerHTML = '';
+      removeFileBtn.style.display = 'none';
       nextBtn.style.display      = 'block';
       nextBtn.textContent        = 'സമർപ്പിക്കുക ✓';
       answered = true;
@@ -329,6 +499,7 @@ const quizData = [
     // normal question
     optionsGrid.style.display = 'grid';
     essayInput.style.display  = 'none';
+    essaySection.style.display = 'none';
 
     optBtns.forEach((btn, i) => {
       btn.textContent = q.options[i] || '';
@@ -376,11 +547,34 @@ const quizData = [
     const q = quizData[current];
 
     if (q.type === 'essay') {
-      if (essayInput.value.trim() === '') {
-        feedback.textContent   = '✏️ ദയവായി ഉത്തരം എഴുതുക.';
+      // Allow either text OR file upload as answer
+      if (essayInput.value.trim() === '' && !uploadedFile) {
+        feedback.textContent   = '✏️ ദയവായി ഉത്തരം എഴുതുക അല്ലെങ്കിൽ ഫയൽ അപ്‌ലോഡ് ചെയ്യുക.';
         feedback.style.color   = '#dc3545';
         return;
       }
+      // Log the answer (text or file info)
+      if (uploadedFile) {
+        console.log('File uploaded:', uploadedFile.name, uploadedFile.type);
+        feedback.textContent   = '📎 ഫയലും ഉത്തരവും സമർപ്പിച്ചിരിക്കുന്നു!';
+      } else {
+        feedback.textContent   = '✓ ഉത്തരം സമർപ്പിച്ചിരിക്കുന്നു!';
+      }
+      feedback.style.color   = '#28a745';
+      showResult();
+      return;
+    }
+
+    if (q.type === 'upload') {
+      // File upload only (no text input)
+      if (!uploadedFile) {
+        feedback.textContent   = '📎 ദയവായി ഫയൽ അപ്‌ലോഡ് ചെയ്യുക.';
+        feedback.style.color   = '#dc3545';
+        return;
+      }
+      console.log('File uploaded:', uploadedFile.name, uploadedFile.type);
+      feedback.textContent   = '📎 ഫയൽ സമർപ്പിച്ചിരിക്കുന്നു!';
+      feedback.style.color   = '#28a745';
       showResult();
       return;
     }
@@ -394,6 +588,7 @@ const quizData = [
       qBox.style.display           = 'none';
       optionsGrid.style.display    = 'none';
       essayInput.style.display     = 'none';
+      essaySection.style.display   = 'none';
       feedback.style.display       = 'none';
       nextBtn.style.display        = 'none';
       // essay question not counted in score

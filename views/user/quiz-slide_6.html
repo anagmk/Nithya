@@ -34,9 +34,15 @@
         <input type="text" id="qTextInput" class="q-text-input" placeholder="ഉത്തരം എഴുതുക...">
       </div>
 
-      <!-- Text input for Q2 -->
-      <div class="q-input-container" id="qInputContainer" style="display:none;">
-        <input type="text" id="qTextInput" class="q-text-input" placeholder="ഉത്തരം എഴുതുക...">
+      <!-- File upload section -->
+      <div class="file-upload-section" id="fileUploadSection" style="display:none;">
+        <label class="upload-label">
+          <span class="upload-icon">📎</span>
+          <span class="upload-text">ഫയൽ അപ്‌ലോഡ് ചെയ്യാനുള്ള ഓപ്ഷൻ</span>
+          <input type="file" id="answerFile" class="file-input" accept="image/*,.pdf,.doc,.docx,.txt">
+        </label>
+        <div id="filePreview" class="file-preview"></div>
+        <button type="button" id="removeFileBtn" class="remove-file-btn" style="display:none;">✕ ഫയൽ നീക്കം ചെയ്യുക</button>
       </div>
 
       <!-- Feedback -->
@@ -276,6 +282,81 @@
     outline: none;
     border-color: #7a5d4d;
   }
+
+  /* File upload section */
+  .file-upload-section {
+    margin-top: 14px;
+    padding: 16px;
+    background: #fff8f0;
+    border: 2px dashed #d3c4a6;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: #7a5d4d;
+    color: #f8f0e3;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+    font-size: 0.95rem;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .upload-label:hover {
+    background: #5a3d2e;
+    transform: translateY(-2px);
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .file-preview {
+    margin-top: 12px;
+    padding: 10px;
+    background: #f0e0cc;
+    border-radius: 8px;
+    display: none;
+  }
+
+  .file-preview.has-file {
+    display: block;
+  }
+
+  .file-preview img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 6px;
+  }
+
+  .file-preview .file-name {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #5a3d2e;
+    font-weight: bold;
+  }
+
+  .remove-file-btn {
+    margin-top: 10px;
+    padding: 6px 14px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: "Noto Sans Malayalam", "Noto Serif Malayalam", "Rachana", "Manjari", Georgia, serif;
+  }
+
+  .remove-file-btn:hover {
+    background: #c82333;
+  }
 </style>
 
 
@@ -287,7 +368,7 @@
     {
       question: "പഴഞ്ചൊല്ലുകൾ ഫോക്‌ലോർ ഭാഗമല്ല",
       options: ["ശരി", "തെറ്റ്"],
-      correct: 0
+      correct: 1
     },
     {
       question: `"വിതച്ചവൻ____ "എന്ന പഴഞ്ചൊല്ല് പരിശ്രമത്തിൻ്റ മൂല്യം വ്യക്തമാക്കുന്നു.`,
@@ -298,15 +379,15 @@
     },
     {
       question: "അന്നവിചാരം, മുന്ന വിചാരം എന്ന പഴഞ്ചൊല്ല് എന്തിൻ്റെ പ്രാധാന്യത്തെയാണ് സൂചിപ്പിക്കുന്നത്?",
-      options: ["ാവിയെക്കുറിച്ചുള്ള ചിന്ത", "ഭക്ഷണത്തെക്കുറിച്ചുള്ള ചിന്ത", "തീരുമാനങ്ങൾ എടുക്കുന്നതിലെ ശ്രദ്ധ", "സമ്പാദ്യ ശീലം"],
+      options: ["ഭാവിയെക്കുറിച്ചുള്ള ചിന്ത", "ഭക്ഷണത്തെക്കുറിച്ചുള്ള ചിന്ത", "തീരുമാനങ്ങൾ എടുക്കുന്നതിലെ ശ്രദ്ധ", "സമ്പാദ്യ ശീലം"],
       correct: 2
     },
     {
       question: `"അത്താഴം അരവയറ്"
-"അന്നവിചാരം മുന്ന വിചാരം
-പിന്നെ വിചാരം കാര്യവിചാരം"
-ഇതുപോലുള്ള ഭക്ഷണം, കൃഷി എന്നിവയുമായി ബന്ധപ്പെട്ട പഴഞ്ചൊല്ലുകൾ ശേഖരിച്ച് ഡിജിറ്റൽ പഴഞ്ചൊൽ പതിപ്പ് തയ്യാറാക്കുക`,
-      type: "text",
+                "അന്നവിചാരം മുന്ന വിചാരം
+                പിന്നെ വിചാരം കാര്യവിചാരം"
+                ഇതുപോലുള്ള ഭക്ഷണം, കൃഷി എന്നിവയുമായി ബന്ധപ്പെട്ട പഴഞ്ചൊല്ലുകൾ ശേഖരിച്ച് ഡിജിറ്റൽ പഴഞ്ചൊൽ പതിപ്പ് തയ്യാറാക്കുക`,
+      type: "upload",
       options: [],
       correct: null
     }
@@ -342,6 +423,42 @@
     essayInput.placeholder = 'നിങ്ങളുടെ ഉത്തരം ഇവിടെ എഴുതുക...';
     essayInput.style.display = 'none';
     optionsGrid.insertAdjacentElement('afterend', essayInput);
+
+    // File upload elements
+    const fileUploadSection = document.getElementById('fileUploadSection');
+    const fileInput = document.getElementById('answerFile');
+    const filePreview = document.getElementById('filePreview');
+    const removeFileBtn = document.getElementById('removeFileBtn');
+    let uploadedFile = null;
+
+    // File input event listener
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        uploadedFile = file;
+        filePreview.className = 'file-preview has-file';
+        
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            filePreview.innerHTML = '<img src="' + e.target.result + '" alt="Uploaded file"><span class="file-name">' + file.name + '</span>';
+          };
+          reader.readAsDataURL(file);
+        } else {
+          filePreview.innerHTML = '<span class="file-name">📄 ' + file.name + '</span>';
+        }
+        removeFileBtn.style.display = 'inline-block';
+      }
+    });
+
+    // Remove file button event listener
+    removeFileBtn.addEventListener('click', function() {
+      uploadedFile = null;
+      fileInput.value = '';
+      filePreview.className = 'file-preview';
+      filePreview.innerHTML = '';
+      removeFileBtn.style.display = 'none';
+    });
 
     function loadQuestion(idx) {
       answered = false;
@@ -389,10 +506,27 @@
         return;
       }
 
+      if (q.type === 'upload') {
+        // file upload only
+        optionsGrid.style.display = 'none';
+        fileUploadSection.style.display = 'block';
+        // Reset file upload
+        uploadedFile = null;
+        fileInput.value = '';
+        filePreview.className = 'file-preview';
+        filePreview.innerHTML = '';
+        removeFileBtn.style.display = 'none';
+        nextBtn.style.display = 'block';
+        nextBtn.textContent = 'സമർപ്പിക്കുക ✓';
+        answered = true;
+        return;
+      }
+
       // normal question
       optionsGrid.style.display = 'grid';
       essayInput.style.display = 'none';
       qInputContainer.style.display = 'none';
+      fileUploadSection.style.display = 'none';
 
       optBtns.forEach((btn, i) => {
         btn.textContent = q.options[i] || '';
@@ -481,6 +615,20 @@
         return;
       }
 
+      if (q.type === 'upload') {
+        // File upload only
+        if (!uploadedFile) {
+          feedback.textContent = '📎 ദയവായി ഫയൽ അപ്‌ലോഡ് ചെയ്യുക.';
+          feedback.style.color = '#dc3545';
+          return;
+        }
+        console.log('File uploaded:', uploadedFile.name, uploadedFile.type);
+        feedback.textContent = '📎 ഫയൽ സമർപ്പിച്ചിരിക്കുന്നു!';
+        feedback.style.color = '#28a745';
+        showResult();
+        return;
+      }
+
       if (q.type === 'text') {
         // Just move to next question without verification
         if (current < quizData.length - 1) {
@@ -522,6 +670,7 @@
       qInputContainer.style.display = 'none';
       qTextInput.disabled = false;
       essayInput.style.display = 'none';
+      fileUploadSection.style.display = 'none';
       loadQuestion(0);
     });
 

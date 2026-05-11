@@ -6,21 +6,33 @@
     <title>Folklore Integrated Instructional Package</title>
     <style>
         /* General Body Styling */
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+
         body {
             margin: 0;
             padding: 0;
+            min-height: 100%;
+            overflow: hidden;
             background-color: #f8f0e3; /* Softer, lighter parchment */
             font-family: 'Noto Sans Malayalam', 'Noto Serif Malayalam', 'Rachana', 'Manjari', 'Georgia', serif;
             color: #3d2a1f; /* Darker, richer text color */
             text-align: center;
             line-height: 1.6;
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
         }
 
         /* Container for content and background elements */
         .page-container {
             position: relative;
-            min-height: 100vh;
-            padding: 80px 40px; /* More padding for better visual spacing */
+            width: min(100%, 1200px);
+            height: 100dvh;
+            padding: clamp(28px, 6vh, 80px) clamp(18px, 4vw, 40px); /* More padding for better visual spacing */
+            box-sizing: border-box;
             max-width: 1200px; /* Slightly wider for better text flow */
             margin: 0 auto; /* Center the main content area */
             background-color: rgba(255, 255, 255, 0.7); /* Slight translucent background for main content */
@@ -28,6 +40,9 @@
             border: 1px solid #d3c4a6; /* Subtle border */
             border-radius: 8px; /* Slightly rounded corners */
             overflow: hidden; /* Hide overflowing background elements */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         /* Lamp Image Styling */
@@ -46,13 +61,13 @@
         /* Title Section Styling */
         .title-section {
             max-width: 1000px; /* Max width for title text */
-            margin: 0 auto 50px auto; /* Add more bottom margin */
+            margin: 0 auto clamp(18px, 4vh, 50px) auto; /* Add more bottom margin */
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2); /* More prominent shadow for title */
         }
 
         .title-section p {
             font-family: 'Playfair Display', serif; /* A more decorative font for titles */
-            font-size: 2.8em; /* Larger title font */
+            font-size: clamp(1.35rem, 3.4vw, 2.8rem); /* Larger title font */
             font-weight: 700;
             line-height: 1.2;
             margin: 0 0 15px 0; /* Spacing between title lines */
@@ -67,7 +82,8 @@
 
         /* Divider Space */
         .spacer {
-            height: 80px; /* Reduced spacer height */
+            height: clamp(14px, 6vh, 80px); /* Reduced spacer height */
+            flex: 0 1 auto;
         }
 
         /* Credits Section Styling */
@@ -77,11 +93,11 @@
             max-width: 900px;
             margin: 0 auto;
             text-align: left;
-            font-size: 1.5em; /* Adjusted font size for balance */
+            font-size: clamp(1rem, 1.8vw, 1.5rem); /* Adjusted font size for balance */
             font-weight: normal;
             color: #4a382d;
             border-top: 1px solid #d3c4a6; /* A subtle separator */
-            padding-top: 30px;
+            padding-top: clamp(14px, 3vh, 30px);
         }
 
         .credits-section div {
@@ -90,14 +106,14 @@
         }
 
         .credits-section p {
-            margin: 8px 0;
+            margin: clamp(3px, 1vh, 8px) 0;
             font-family: 'Lora', serif; /* A gentle serif for body text */
         }
 
         .credits-section .role-title {
             font-size: 1.6em; /* Larger role titles */
             font-weight: 700;
-            margin-bottom: 30px; /* More space below role titles */
+            margin-bottom: clamp(10px, 3vh, 30px); /* More space below role titles */
             color: #5a3d2e;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -129,28 +145,60 @@
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .page-container {
-                padding: 40px 20px;
+                padding: 24px 16px 76px;
+                border-radius: 0;
             }
             .title-section p {
-                font-size: 1.8em;
+                font-size: clamp(1rem, 5.4vw, 1.8rem);
+                line-height: 1.15;
+                margin-bottom: 10px;
+                overflow-wrap: anywhere;
             }
             .credits-section {
                 flex-direction: column;
                 text-align: center;
+                gap: 12px;
+                font-size: clamp(0.82rem, 3.8vw, 1rem);
             }
             .credits-section div {
-                width: 100%;
-                margin-bottom: 30px;
+                width: 100% !important;
+                margin-bottom: 0;
+                padding: 0;
+                text-align: center !important;
             }
             .credits-section .role-title {
-                font-size: 1.4em;
-                margin-bottom: 15px;
+                font-size: 1.2em;
+                margin-bottom: 8px;
             }
             .next-page-button {
-                bottom: 20px;
-                right: 20px;
-                padding: 10px 20px;
-                font-size: 1em;
+                bottom: 16px;
+                right: 16px;
+                padding: 9px 16px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-height: 620px) {
+            .page-container {
+                padding-top: 18px;
+                padding-bottom: 62px;
+            }
+            .title-section p {
+                font-size: clamp(0.78rem, 3vh, 1.25rem);
+                margin-bottom: 6px;
+            }
+            .spacer {
+                height: 8px;
+            }
+            .credits-section {
+                font-size: clamp(0.62rem, 2vh, 0.85rem);
+                padding-top: 8px;
+            }
+            .credits-section .role-title {
+                margin-bottom: 4px;
+            }
+            .credits-section p {
+                margin: 2px 0;
             }
         }
     </style>
